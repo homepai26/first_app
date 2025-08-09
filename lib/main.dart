@@ -25,57 +25,35 @@ class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
       body: Center(
-        child: Container(
-          width: 120,
-          height: 300,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                left: 20,
-                top: 20,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-
-              Positioned(
-                left: 20,
-                top: 110,
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.yellow,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-
-              Positioned(
-                left: 20,
-                top: 200,
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png",
+              width: 100,
+              height: 100,
+            ),
+            Image.asset(
+              "google-logo.png",
+              width: 100,
+              height: 100,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+              onPressed: () {
+                print("Clicked");
+              },
+              child: Text("Click me!"),
+            ),
+            TextButton(
+              onPressed: () {
+                print("Clicked Text Button!");
+              },
+              child: Text("Click for information"),
+            ),
+          ],
         ),
       ),
     );
