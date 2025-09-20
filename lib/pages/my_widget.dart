@@ -13,8 +13,8 @@ class MyWidget extends StatelessWidget {
       body: ListView.separated(
         itemCount: listProduct.length,
         separatorBuilder: (context, index) {
-          //return Divider();
-          return Container(height: 5, width: double.infinity, color: Colors.amber, margin: EdgeInsets.symmetric(horizontal: 20),);
+          return Divider();
+          //return Container(height: 5, width: double.infinity, color: Colors.amber, margin: EdgeInsets.symmetric(horizontal: 20),);
         },
         itemBuilder: (context, index) {
           return ListTile(
