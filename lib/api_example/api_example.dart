@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:first_app/api_example/model/user.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,10 @@ void fetchUser() async {
     );
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      User user = User.fromJson(data);
-      userData = user;
-      print('Name: ${user.name}');
+      //User user = User.fromJson(data);
+      //need to set stage in here
+      userData = User.fromJson(data);
+      //print('Name: ${user.name}');
     } else {
       print('Failed to fetch data');
     }
@@ -43,7 +45,15 @@ class _ApiExampleState extends State<ApiExample> {
     return Scaffold(
       appBar: AppBar(title: Text("Api Example")),
       body: Center(
-        child: Text('${userData?.name}'),
+        child: Column(
+          children: [
+            Text("Name: ${userData?.name}"),
+            ElevatedButton(onPressed: () {setState(() {
+              int i = 0;
+              i++;
+            });}, child: Text("Update"))
+          ],
+        )
       )
     );
   }
