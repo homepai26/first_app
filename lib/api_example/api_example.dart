@@ -10,7 +10,8 @@ User? userData;
 void fetchUser() async {
   try {
     var response = await http.get(
-      Uri.parse('https://jsonplaceholder.typicode.com/users/1'),
+      //https://api.waqi.info/feed/here/?token=d5071e86802063d0a4637b5fda431847b7fbc02d
+      Uri.parse('https://jsonplaceholder.typicode.com/users'),
     );
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
