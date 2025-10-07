@@ -92,6 +92,7 @@ class _AddProductFormState extends State<AddProductForm> {
                       descriptionController.text,
                       double.parse(priceController.text),
                     );
+                    Navigator.pop(context);
                   }
                 },
                 child: Text("Submit"),

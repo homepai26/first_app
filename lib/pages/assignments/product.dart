@@ -75,42 +75,43 @@ class _ProductState extends State<Product> {
     }
   }
 
-  Future<void> createProduct() async {
+  Future<void> updateProduct(
+    int id, {
+    String? name,
+    String? description,
+    double? price,
+  }) async {
     try {
-      var response = await http.post(
-        Uri.parse("http://localhost:8001/products"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "name": "iPhone 5s",
-          "description": "Apple smartphone",
-          "price": 21999.00,
-        }),
-      );
-      if (response.statusCode == 201) {
-        //code somthing...
-      } else {
-        throw Exception("Failed to load products");
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+      Map<String, dynamic> json = Map();
 
-  Future<void> updateProduct(int id, {String? name, String? description, double? price}) async {
-    try {
+      json["id"] = id;
+
+      if (name != null) {
+        json["name"] = name;
+      }
+
+      if (description != null) {
+        json["description"] = description;
+      }
+
+      if (price != null) {
+        json["price"] = price;
+      }
+
       var response = await http.put(
         Uri.parse("http://localhost:8001/products/$id"),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "name": name,
-          "description": description,
-          "price": 34900.00,
-        }),
+        body: jsonEncode(json),
       );
+
       if (response.statusCode == 200) {
         //code somthing...
-        
-        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Edit successfully!"),
+            backgroundColor: Colors.green,
+          ),
+        );
       } else {
         throw Exception("Failed to load products");
       }
@@ -126,7 +127,12 @@ class _ProductState extends State<Product> {
       );
       if (response.statusCode == 200) {
         //code somthing...
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Delete successfully!"), backgroundColor: Colors.green));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Delete successfully!"),
+            backgroundColor: Colors.green,
+          ),
+        );
         fetchData();
       } else {
         throw Exception("Failed to delete products");
@@ -149,6 +155,10 @@ class _ProductState extends State<Product> {
       appBar: AppBar(title: Text("Product")),
       body: ListView.separated(
         itemBuilder: (context, value) {
+          GlobalKey<FormState> editingFormKey = GlobalKey();
+          TextEditingController productNameController = TextEditingController();
+          TextEditingController descriptionController = TextEditingController();
+          TextEditingController priceController = TextEditingController();
           return ListTile(
             leading: Text("${value + 1}"),
             title: Text("${products[value].name}"),
@@ -161,7 +171,93 @@ class _ProductState extends State<Product> {
                   "${products[value].price}฿",
                   style: TextStyle(fontSize: 16),
                 ),
-                ElevatedButton(onPressed: () {}, child: Text("Edit")),
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text("Editing ${products[value].name}"),
+                        content: Form(
+                          key: editingFormKey,
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              spacing: 20,
+                              children: [
+                                TextFormField(
+                                  controller: productNameController,
+                                  decoration: InputDecoration(
+                                    labelText: "Product Name",
+                                  ),
+                                  validator: (value) => (value!.isNotEmpty)
+                                      ? null
+                                      : "Product Name is empty",
+                                ),
+
+                                TextFormField(
+                                  controller: descriptionController,
+                                  decoration: InputDecoration(
+                                    labelText: "Description",
+                                  ),
+                                  validator: (value) => (value!.isNotEmpty)
+                                      ? null
+                                      : "Description is empty",
+                                ),
+
+                                TextFormField(
+                                  controller: priceController,
+                                  decoration: InputDecoration(
+                                    labelText: "Price",
+                                  ),
+                                  validator: (value) {
+                                    RegExp regExp = RegExp(r'[a-zA-Z]');
+                                    if (value!.isEmpty) {
+                                      return "Price is empty";
+                                    } else if (regExp.hasMatch(value)) {
+                                      return "Value in Price field is not a number";
+                                    } else if (double.parse(value!) <= 0) {
+                                      return "Price is not in range 1,2,...";
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              if (editingFormKey.currentState!.validate()) {
+                                updateProduct(
+                                  products[value].id,
+                                  name: productNameController.text,
+                                  description: descriptionController.text,
+                                  price: double.parse(priceController.text),
+                                ).then((value) => fetchData());
+                                Navigator.pop(context, "OK");
+                              }
+                            },
+                            child: Text("OK"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, "Cancel");
+                            },
+                            child: Text("Cancel"),
+                          ),
+                        ],
+                        // when completely init form, so fill its default value
+                      ),
+                    );
+                    productNameController.text = products[value].name;
+                    descriptionController.text = products[value].description;
+                    priceController.text = products[value].price.toString();
+                  },
+                  child: Text("Edit"),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     showDialog(
