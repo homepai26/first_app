@@ -5,6 +5,9 @@ import 'package:first_app/pages/assignments/form_input.dart';
 import 'package:first_app/pages/assignments/product.dart';
 import 'package:first_app/pages/counter_assignment_widget.dart';
 import 'package:first_app/pages/counter_widget.dart';
+import 'package:first_app/pages/custom/profile_card_scaffold.dart';
+import 'package:first_app/pages/custom/scoreboard_scaffold.dart';
+import 'package:first_app/pages/custom/simple_custom_widget.dart';
 import 'package:first_app/pages/forms/form_expample1_controller.dart';
 import 'package:first_app/pages/greeting_widget.dart';
 import 'package:first_app/navigation/first_page.dart';
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/second': (context) => const SecondPage(),
         '/counter': (context) => const CounterAssignmentWidget(),
       }, */
-      home: Product(),
+      home: ProfileCardScaffold(),
     );
   }
 }

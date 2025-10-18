@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+
+class SimpleCustomWidget extends StatefulWidget {
+  const SimpleCustomWidget({super.key});
+
+  @override
+  State<SimpleCustomWidget> createState() => _SimpleCustomWidgetState();
+}
+
+class _SimpleCustomWidgetState extends State<SimpleCustomWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Custom Widget"),),
+      body: Column(
+        children: [
+          Container(
+            height: 50,
+            color: Colors.red,
+            child: Text("Hello"),
+          ),
+          Container(
+            height: 50,
+            color: Colors.blue,
+            child: Text("Hello"),
+          ),
+        ],
+      ),
+    );
+  }
+}
